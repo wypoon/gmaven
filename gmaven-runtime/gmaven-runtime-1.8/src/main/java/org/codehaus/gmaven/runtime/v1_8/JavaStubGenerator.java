@@ -613,7 +613,7 @@ public class JavaStubGenerator {
     }
 
     private void printAnnotation(PrintWriter out, AnnotationNode annotation) {
-        out.print("@" + annotation.getClassNode().getName() + "(");
+        out.print("@" + annotation.getClassNode().getName().replace("$",".") + "(");
         boolean first = true;
         Map<String, Expression> members = annotation.getMembers();
         for (String key : members.keySet()) {
@@ -651,7 +651,7 @@ public class JavaStubGenerator {
                 val = "\"" + escapeStringAnnotationValue(constValue.toString()) + "\"";
         } else if (memberValue instanceof PropertyExpression || memberValue instanceof VariableExpression) {
             // assume must be static class field or enum value or class that Java can resolve
-            val = ((Expression) memberValue).getText();
+            val = ((Expression) memberValue).getText().replace("$",".");
         } else if (memberValue instanceof ClosureExpression) {
             // annotation closure; replaced with this specific class literal to cover the
             // case where annotation type uses Class<? extends Closure> for the closure's type
